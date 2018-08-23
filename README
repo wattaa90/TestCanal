@@ -1,3 +1,62 @@
-Test Partie 1 et 2:
+partie  SQL
 
-Dans le dossier Log nous pouvons consulter l'état de la carte ainsi que des aventuriers. 
+1 - Le NULL dans la table Panier signifie que la valeur de date de commande est innexistante. 
+Fonctionnelement cela veut dire que la commande du panier n'a pas été effectuée
+
+
+
+
+2 - Panier Actif ==> commande non effectuée
+	SELECT * FROM PANIERS WHERE ID_UTILISATEUR = 'unUtilisateur' and DATE_COMMANDE = NULL;
+
+
+
+3 - Pour l'execution d'une requette dans un temps correct.
+	Utiliser des columns INDEXé dans les critere de la requette. 
+
+
+
+
+4  	SELECT ARTICLES.ID_PANIER, PRODUITS.LIBILLE_PRODUIT, PRODUITS.PRIX FROM ARTICLES
+	inner join PRODUITS on (ARTICLES.ID_PRODUIT =  PRODUITS.ID_PRODUIT);
+
+
+
+
+
+5	SELECT ARTICLES.ID_PANIER, COUNT(ARTICLES.ID_ARTICLE)
+	inner join PANIERS on (ARTICLES.ID_PANIER =  PANIERs.ID_PANIER)
+	WHERE YEAR(PANIERS.DATE_CREATION) = '2018' 
+	group by ARTICLES.ID_PANIER;
+
+
+6 Non elle ne remonte pas les Panier sans articles
+
+
+SELECT ARTICLES.ID_PANIER, COUNT(ARTICLES.ID_ARTICLE)
+	RIGHT join PANIERS on (ARTICLES.ID_PANIER =  PANIERs.ID_PANIER)
+	WHERE YEAR(PANIERS.DATE_CREATION) = '2018' 
+	group by ARTICLES.ID_PANIER;
+
+
+
+7 - 
+
+
+SELECT peryears.annee, perMonth.mois, perdays.jour, perDays.count FROM 
+
+( SELECT YEAR(PANIERS.DATE_CREATION) as annee 
+	RIGHT join PANIERS on (ARTICLES.ID_PANIER =  PANIERs.ID_PANIER) 
+	group by YEAR(PANIERS.DATE_CREATION))  as peryears    
+
+inner join ( SELECT MONTH(PANIERS.DATE_CREATION) as mois, SELECT YEAR(PANIERS.DATE_CREATION) as anneeM 
+	RIGHT join PANIERS on (ARTICLES.ID_PANIER =  PANIERs.ID_PANIER) 
+	group by MONTH(PANIERS.DATE_CREATION))  as perMonth on (peryears.annee = perMonth.anneeM)
+
+
+inner join ( SELECT DAY(PANIERS.DATE_CREATION) as jour, SELECT MONTH(PANIERS.DATE_CREATION) as moisJ, COUNT(ARTICLES.ID_ARTCILES) as count
+	RIGHT join PANIERS on (ARTICLES.ID_PANIER =  PANIERs.ID_PANIER) 
+	group by DAY(PANIERS.DATE_CREATION))  as perDays on (pemonth.month = perDays.moisJ);
+
+
+SELECT ANNEE FROM 
